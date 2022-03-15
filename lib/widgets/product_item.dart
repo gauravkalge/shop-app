@@ -25,7 +25,12 @@ class ProductItem extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
         ),
-        trailing: const Icon(Icons.shopping_cart),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.shopping_cart,
+          ),
+          onPressed: () {},
+        ),
       ),
     );
   }
