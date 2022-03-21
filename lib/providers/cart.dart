@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart';
 
 class CartItem {
@@ -27,8 +29,8 @@ class Cart with ChangeNotifier {
 
   double get totalAmount {
     var total = 0.0;
-    _items.forEach((key, cartItem) {
-      total += cartItem.price * cartItem.quantity;
+    _items.forEach((key, CartItem) {
+      total += CartItem.price * CartItem.quantity;
     });
     return total;
   }
@@ -39,25 +41,22 @@ class Cart with ChangeNotifier {
     String title,
   ) {
     if (_items.containsKey(productId)) {
-      // change quantity...
       _items.update(
-        productId,
-        (existingCartItem) => CartItem(
+          productId,
+          (existingCartItem) => CartItem(
               id: existingCartItem.id,
               title: existingCartItem.title,
-              price: existingCartItem.price,
               quantity: existingCartItem.quantity + 1,
-            ),
-      );
+              price: existingCartItem.price));
     } else {
       _items.putIfAbsent(
         productId,
         () => CartItem(
-              id: DateTime.now().toString(),
-              title: title,
-              price: price,
-              quantity: 1,
-            ),
+          id: DateTime.now().toString(),
+          title: title,
+          price: price,
+          quantity: 1,
+        ),
       );
     }
     notifyListeners();
@@ -65,6 +64,25 @@ class Cart with ChangeNotifier {
 
   void removeItem(String productId) {
     _items.remove(productId);
+    notifyListeners();
+  }
+
+  void removeSingleItem(productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId].quantity > 1) {
+      _items.update(
+        productId,
+        (existingCartItem) => CartItem(
+            id: existingCartItem.id,
+            title: existingCartItem.title,
+            quantity: existingCartItem.quantity - 1,
+            price: existingCartItem.price),
+      );
+    } else {
+      _items.remove(productId);
+    }
     notifyListeners();
   }
 
