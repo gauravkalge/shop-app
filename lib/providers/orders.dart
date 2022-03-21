@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../providers/cart.dart';
 
-import './cart.dart';
-
-class OrderItem {
+class OrderItem with ChangeNotifier {
   final String id;
   final double amount;
-  final List<CartItem> products;
   final DateTime dateTime;
-
+  final List<CartItem> products;
   OrderItem({
     @required this.id,
     @required this.amount,
@@ -18,7 +17,6 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
-
   List<OrderItem> get orders {
     return [..._orders];
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
 import '../providers/orders.dart';
@@ -13,7 +12,7 @@ class CartScreen extends StatelessWidget {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Cart'),
+        title: Text('Your cart'),
       ),
       body: Column(
         children: <Widget>[
@@ -26,48 +25,41 @@ class CartScreen extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'Total',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
                   Spacer(),
                   Chip(
-                    label: Text(
-                      '\$${cart.totalAmount.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
+                    label: Text('\$${cart.totalAmount.toStringAsFixed(2)}'),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(
-                    child: Text('ORDER NOW', style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),),
+                  FlatButton(
                     onPressed: () {
                       Provider.of<Orders>(context, listen: false).addOrder(
-                        cart.items.values.toList(),
-                        cart.totalAmount,
-                      );
+                          cart.items.values.toList(), cart.totalAmount);
                       cart.clear();
                     },
-                    
-                  )
+                    child: Text('Order Now'),
+                    textColor: Theme.of(context).primaryColor,
+                  ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
-            child: ListView.builder(
-              itemCount: cart.items.length,
-              itemBuilder: (ctx, i) => CartItem(
-                    cart.items.values.toList()[i].id,
-                    cart.items.keys.toList()[i],
-                    cart.items.values.toList()[i].price,
-                    cart.items.values.toList()[i].quantity,
-                    cart.items.values.toList()[i].title,
-                  ),
-            ),
-          )
+              child: ListView.builder(
+            itemBuilder: (ctx, i) => CartItem(
+                cart.items.values.toList()[i].id,
+                cart.items.keys.toList()[i],
+                cart.items.values.toList()[i].price,
+                cart.items.values.toList()[i].quantity,
+                cart.items.values.toList()[i].title),
+            itemCount: cart.items.length,
+          ))
         ],
       ),
     );
